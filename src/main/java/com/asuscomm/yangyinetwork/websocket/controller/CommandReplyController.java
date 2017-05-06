@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 public class CommandReplyController {
     @MessageMapping("/general/command")
     @SendTo("/topic/command/general")
-    public CommandReply commandReply(Command command) throws Exception {
+    public CommandReply commandReply(Command<Object> command) throws Exception {
         log.info("CommandReplyController/commandReply: [{}]",command.toString());
 
         return new CommandReply("testCommand", "test", "hi");
