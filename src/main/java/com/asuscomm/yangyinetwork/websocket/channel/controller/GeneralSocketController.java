@@ -1,9 +1,9 @@
-package com.asuscomm.yangyinetwork.websocket.controller;
+package com.asuscomm.yangyinetwork.websocket.channel.controller;
 
-import com.asuscomm.yangyinetwork.websocket.controller.consts.Commands;
-import com.asuscomm.yangyinetwork.websocket.domain.Command;
-import com.asuscomm.yangyinetwork.websocket.domain.CommandReply;
-import com.asuscomm.yangyinetwork.websocket.service.GeneralCommandService;
+import com.asuscomm.yangyinetwork.websocket.channel.controller.consts.Commands;
+import com.asuscomm.yangyinetwork.websocket.channel.domain.Command;
+import com.asuscomm.yangyinetwork.websocket.channel.domain.CommandReply;
+import com.asuscomm.yangyinetwork.websocket.channel.service.GeneralCommandService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 @Slf4j
 @Controller
-public class CommandReplyController {
+public class GeneralSocketController {
     @MessageMapping("/general/command")
     @SendTo("/topic/command/general")
     public CommandReply commandReply(Command<Object> command) throws Exception {
@@ -37,15 +37,6 @@ public class CommandReplyController {
         }
 
 
-        return commandReply;
-    }
-
-    @MessageMapping("/{channel}/command")
-    @SendTo("/topic/command/{channel}")
-    public CommandReply channelCommandReply(@DestinationVariable String channel, Command<Object> command) throws Exception {
-        log.info("CommandReplyController/channelCommandReply: [{}]",channel);
-        CommandReply commandReply = null;
-        commandReply = new CommandReply("testCommand", "test", "hi");
         return commandReply;
     }
 

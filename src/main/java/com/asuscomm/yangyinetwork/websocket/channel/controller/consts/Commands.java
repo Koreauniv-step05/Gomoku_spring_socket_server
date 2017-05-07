@@ -1,4 +1,4 @@
-package com.asuscomm.yangyinetwork.websocket.controller.consts;
+package com.asuscomm.yangyinetwork.websocket.channel.controller.consts;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..

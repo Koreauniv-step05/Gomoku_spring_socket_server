@@ -1,4 +1,4 @@
-package com.asuscomm.yangyinetwork.websocket.domain;
+package com.asuscomm.yangyinetwork.websocket.channel.domain;
 
 /**
  * Created by jaeyoung on 2017. 5. 5..

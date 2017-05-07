@@ -1,17 +1,17 @@
-package com.asuscomm.yangyinetwork.websocket.domain;
+package com.asuscomm.yangyinetwork.websocket.ingame.domain;
 
 /**
- * Created by jaeyoung on 2017. 5. 5..
+ * Created by jaeyoung on 2017. 5. 7..
  */
-public class Command<T> {
+public class SocketMessage<T> {
     private String command;
     private String message;
     private T content;
 
-    public Command() {
+    public SocketMessage() {
     }
 
-    public Command(String command, String message, T content) {
+    public SocketMessage(String command, String message, T content) {
         this.command = command;
         this.message = message;
         this.content = content;
@@ -43,7 +43,7 @@ public class Command<T> {
 
     @Override
     public String toString() {
-        return "Command{" +
+        return "SocketMessage{" +
                 "command='" + command + '\'' +
                 ", message='" + message + '\'' +
                 ", content=" + content +

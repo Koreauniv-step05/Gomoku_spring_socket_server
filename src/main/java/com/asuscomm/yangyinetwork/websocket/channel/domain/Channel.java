@@ -1,7 +1,10 @@
-package com.asuscomm.yangyinetwork.websocket.domain;
+package com.asuscomm.yangyinetwork.websocket.channel.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_MORE_USER;
+import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_ONLY_OBSERVER;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
@@ -9,7 +12,6 @@ import java.util.List;
 public class Channel {
     List<User> userList;
     String id;
-    String status;
 
     public interface Status {
         String NEEDS_MORE_USER = "NEEDS_MORE_USER";
@@ -17,16 +19,17 @@ public class Channel {
         String ALREADY_STARTED = "ALREADY_STARTED";
     }
 
-    public Channel(String id, String status) {
-        this.userList = new ArrayList<>();
-        this.id = id;
-        this.status = status;
+    public Channel() {
     }
 
-    public Channel(List<User> userList, String id, String status) {
+    public Channel(String id) {
+        this.userList = new ArrayList<>();
+        this.id = id;
+    }
+
+    public Channel(List<User> userList, String id) {
         this.userList = userList;
         this.id = id;
-        this.status = status;
     }
 
     public List<User> getUserList() {
@@ -35,6 +38,13 @@ public class Channel {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public void addUser(User user) {
+        this.userList.add(user);
+    }
+    public void addUser() {
+        this.addUser(new User());
     }
 
     public String getId() {
@@ -46,10 +56,10 @@ public class Channel {
     }
 
     public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+        if(userList.size() >= 2) {
+            return NEEDS_ONLY_OBSERVER;
+        } else {
+            return NEEDS_MORE_USER;
+        }
     }
 }

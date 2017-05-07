@@ -1,4 +1,4 @@
-package com.asuscomm.yangyinetwork.websocket.utils;
+package com.asuscomm.yangyinetwork.websocket.commons.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

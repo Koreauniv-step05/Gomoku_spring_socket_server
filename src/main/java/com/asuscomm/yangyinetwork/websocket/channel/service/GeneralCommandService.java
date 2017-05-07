@@ -1,12 +1,12 @@
-package com.asuscomm.yangyinetwork.websocket.service;
+package com.asuscomm.yangyinetwork.websocket.channel.service;
 
-import com.asuscomm.yangyinetwork.websocket.domain.Channel;
-import com.asuscomm.yangyinetwork.websocket.domain.CommandReply;
+import com.asuscomm.yangyinetwork.websocket.channel.domain.Channel;
+import com.asuscomm.yangyinetwork.websocket.channel.domain.CommandReply;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static com.asuscomm.yangyinetwork.websocket.controller.consts.Commands.TO_CLIENT.JOINED_CHANNEL;
+import static com.asuscomm.yangyinetwork.websocket.channel.controller.consts.Commands.TO_CLIENT.JOINED_CHANNEL;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
@@ -26,18 +26,9 @@ public class GeneralCommandService {
         List<Channel> emptyChannels = ChannelService.getInstance().findEmptyChannels();
         if(emptyChannels.size() > 0) {
             log.info("GeneralCommandService/joinSomewhere: [{}]",emptyChannels.get(0).toString());
-            return joinChannel(emptyChannels.get(0));
+            return ChannelService.getInstance().joinChannel(emptyChannels.get(0));
         } else {
             return null;
         }
-    }
-
-    public CommandReply joinChannel(Channel channel) {
-        // join
-        // if success
-        String message = "You're "+JOINED_CHANNEL+" to "+channel.toString();
-        log.info("GeneralCommandService/joinChannel: [{}]",message);
-        CommandReply commandReply = new CommandReply(JOINED_CHANNEL, message, channel);
-        return commandReply;
     }
 }
