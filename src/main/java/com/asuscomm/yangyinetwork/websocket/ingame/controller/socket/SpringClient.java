@@ -8,10 +8,10 @@ import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketStonePoint;
  */
 public interface SpringClient {
     interface OnToServerListener {
-        void toServer(SocketMessage<Object> socketMessage);
+        void toServer(SocketStonePoint socketMessage);
     }
     void setListener(OnToServerListener listener);
     void toClient(SocketMessage<Object> socketMessage);
-    void toServer(SocketMessage<Object> socketMessage);
+    void toServer(SocketStonePoint socketMessage);
     String getChannelId();
 }

@@ -38,7 +38,7 @@ public class SpringClientImpl implements SpringClient {
         }
     }
 
-    public void toServer(SocketMessage<Object> socketMessage) {
+    public void toServer(SocketStonePoint socketMessage) {
         log.info("SpringClientImpl/toServer: [{}]", socketMessage.toString());
         mListener.toServer(socketMessage);
     }

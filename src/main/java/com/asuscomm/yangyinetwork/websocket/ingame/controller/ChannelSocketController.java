@@ -64,7 +64,7 @@ public class ChannelSocketController {
 
     @MessageMapping("/{channel}/to_server")
     @SendToUser("/topic/to_server/{channel}")
-    public SocketMessage toServer(@DestinationVariable String channel, SocketMessage<Object> socketMessage) throws Exception {
+    public SocketMessage toServer(@DestinationVariable String channel, SocketStonePoint socketMessage) throws Exception {
         log.info("CommandReplyController/commandReply: [{}]",socketMessage.toString());
         SpringClient receiver = null;
         SocketMessage replySocketMessage = null;

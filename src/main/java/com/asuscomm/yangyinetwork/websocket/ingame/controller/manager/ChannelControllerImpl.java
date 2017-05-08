@@ -6,6 +6,7 @@ import com.asuscomm.yangyinetwork.websocket.channel.domain.OnYourTurn;
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.SpringClient;
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.SpringClientImpl;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketMessage;
+import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketStonePoint;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,7 +94,7 @@ public class ChannelControllerImpl implements ChannelController, GameController.
     }
 
     @Override
-    public void toServer(SocketMessage<Object> socketMessage) {
+    public void toServer(SocketStonePoint socketMessage) {
         log.info("ChannelControllerImpl/toServer: [{}]");
         String command = socketMessage.getCommand();
         switch(command) {
