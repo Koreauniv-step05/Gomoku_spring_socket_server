@@ -7,6 +7,7 @@ import com.asuscomm.yangyinetwork.websocket.channel.service.GeneralCommandServic
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.SpringClient;
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.client.SocketClient;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketMessage;
+import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketStonePoint;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -43,8 +45,9 @@ import static com.asuscomm.yangyinetwork.websocket.commons.config.SocketClientCo
  * Created by jaeyoung on 2017. 5. 7..
  */
 @Slf4j
+@Controller
 public class ChannelSocketController {
-    private List<SpringClient> mSpringClients = new ArrayList<>();
+    public List<SpringClient> mSpringClients = new ArrayList<>();
     public static ChannelSocketController mInstance;
 
     public static ChannelSocketController getInstance() {
@@ -56,6 +59,7 @@ public class ChannelSocketController {
 
     public void addSpringClient(SpringClient springClient) {
         mSpringClients.add(springClient);
+        log.info("ChannelSocketController/addSpringClient: [{}]",mSpringClients.toString());
     }
 
     @MessageMapping("/{channel}/to_server")
@@ -66,7 +70,8 @@ public class ChannelSocketController {
         SocketMessage replySocketMessage = null;
 
         for (SpringClient springClient:
-             mSpringClients) {
+                ChannelSocketController.getInstance().mSpringClients) {
+            log.info("ChannelSocketController/toServer: ChannelId : [{}]",springClient.getChannelId());
             if (channel.equals(springClient.getChannelId())) {
                 receiver = springClient;
                 break;

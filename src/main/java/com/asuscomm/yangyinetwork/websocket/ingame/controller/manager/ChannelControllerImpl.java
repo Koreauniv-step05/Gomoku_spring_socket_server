@@ -44,16 +44,16 @@ public class ChannelControllerImpl implements ChannelController, GameController.
         public void run() {
             log.info("ChannelControllerImpl/run: ");
             while(true) {
-                if(repeatFlag) {
-                    if (lastMessage != null) {
-                        log.info("ChannelControllerImpl/run: Call toClient");
-                        mSpringClient.toClient(lastMessage);
-                    } else {
-                        log.info("ChannelControllerImpl/run: null message");
-                    }
-                } else {
-                    repeatFlag = true;
-                }
+//                if(repeatFlag) {
+//                    if (lastMessage != null) {
+//                        log.info("ChannelControllerImpl/run: Call toClient");
+//                        mSpringClient.toClient(lastMessage);
+//                    } else {
+//                        log.info("ChannelControllerImpl/run: null message");
+//                    }
+//                } else {
+//                    repeatFlag = true;
+//                }
 
                 try {
                     Thread.sleep(5000);
@@ -94,10 +94,13 @@ public class ChannelControllerImpl implements ChannelController, GameController.
 
     @Override
     public void toServer(SocketMessage<Object> socketMessage) {
+        log.info("ChannelControllerImpl/toServer: [{}]");
         String command = socketMessage.getCommand();
         switch(command) {
             case ON_NEW_STONE_FROM_CLIENT:
+                log.info("ChannelControllerImpl/toServer: ON_NEW_STONE_FROM_CLIENT BEFORE "+socketMessage.getContent());
                 StonePoint stonePoint = (StonePoint) socketMessage.getContent();
+                log.info("ChannelControllerImpl/toServer: ON_NEW_STONE_FROM_CLIENT AFTER");
                 this.mGameController.onNewStone(stonePoint);
                 break;
         }

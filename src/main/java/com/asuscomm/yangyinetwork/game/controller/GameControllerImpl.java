@@ -1,12 +1,14 @@
 package com.asuscomm.yangyinetwork.game.controller;
 
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
  */
+@Slf4j
 public class GameControllerImpl implements GameController {
 //    private Player mPlayerBlack;
 //    private Player mPlayerWhite;
@@ -38,6 +40,7 @@ public class GameControllerImpl implements GameController {
 
     
     public void rotateTurn() {
+        log.info("GameControllerImpl/rotateTurn: ");
         if(mTurn == BLACK_STONE) {
             mTurn = WHITE_STONE;
         } else {
@@ -58,6 +61,7 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public void onNewStone(int[] newStonePoint, int stoneType) {
+        log.info("GameControllerImpl/onNewStone: [{}]",newStonePoint.toString());
         if(true) { // isvalid?
             // updateBoard
             rotateTurn();

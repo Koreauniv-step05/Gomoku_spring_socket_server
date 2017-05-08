@@ -2,6 +2,7 @@ package com.asuscomm.yangyinetwork.websocket.ingame.controller.socket;
 
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.ChannelSocketController;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketMessage;
+import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketStonePoint;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,6 +19,8 @@ public class SpringClientImpl implements SpringClient {
 
     public SpringClientImpl(String mChannel) {
         this.mChannel = mChannel;
+        log.info("SpringClientImpl/SpringClientImpl: ");
+        ChannelSocketController.getInstance().addSpringClient(this);
     }
 
     @Override
@@ -35,7 +38,8 @@ public class SpringClientImpl implements SpringClient {
         }
     }
 
-    public void toServer(SocketMessage socketMessage) {
+    public void toServer(SocketMessage<Object> socketMessage) {
+        log.info("SpringClientImpl/toServer: [{}]", socketMessage.toString());
         mListener.toServer(socketMessage);
     }
 }
