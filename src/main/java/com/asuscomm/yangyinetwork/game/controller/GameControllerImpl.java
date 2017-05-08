@@ -3,7 +3,11 @@ package com.asuscomm.yangyinetwork.game.controller;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
+import static com.asuscomm.yangyinetwork.game.consts.GAME_DELAY.NEW_GAME_DELAY;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.isGameEnd;
 
 /**
@@ -25,11 +29,17 @@ public class GameControllerImpl implements GameController {
 
 
     public GameControllerImpl(int board_size, GameControllerListener listener) {
+        this.mIsProcessing = true;
         this.mBoardSize = board_size;
+        addGameControllerListener(listener);
+        newGameStart();
+    }
+
+    private void newGameStart() {
+        log.info("GameControllerImpl/newGameStart: ");
         this.mTurn = WHITE_STONE;
         this.mIsProcessing=false;
         this.initBoard();
-        addGameControllerListener(listener);
         rotateTurn();
     }
 
@@ -47,6 +57,7 @@ public class GameControllerImpl implements GameController {
         } else {
             mTurn = BLACK_STONE;
         }
+        this.mIsProcessing = false;
         this.mListener.onYourTurn(this.mTurn, this.mBoard);
     }
 
@@ -62,25 +73,69 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public void onNewStone(int[] newStonePoint, int stoneType) {
-        log.info("GameControllerImpl/onNewStone: [{}]",newStonePoint.toString());
-        if(RuleChecker.isValidStone(mBoard,newStonePoint)) { // isvalid?
-            updateBoard(newStonePoint, stoneType);
-            if(isGameEnd(mBoard,newStonePoint)) {
-                log.info("GameControllerImpl/updateBoard: gameEnd");
+        log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
+        if(stoneType == mTurn) {
+            if (!mIsProcessing) {
+                mIsProcessing = true;
+                if (RuleChecker.isValidStone(mBoard, newStonePoint)) { // isvalid?
+                    updateBoard(newStonePoint, stoneType);
+                    List<int[]> connectTrace = isGameEnd(mBoard, newStonePoint);
+                    if (connectTrace != null) {
+                        // todo save trace connectTrace
+                        updateBoardWithTrace(connectTrace);
+                        log.info("GameControllerImpl/updateBoard: gameEnd");
+                        printBoard(mBoard);
+                        try {
+                            Thread.sleep(NEW_GAME_DELAY);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        newGameStart();
+                    } else {
+
+                        rotateTurn();
+                    }
+                } else {
+                    // send invalid
+                }
             } else {
-                rotateTurn();
+                log.info("GameControllerImpl/onNewStone: IsProcessing");
             }
         } else {
-            // send invalid
+            log.info("GameControllerImpl/onNewStone: NotYourTurn");
         }
+    }
+
+    private  void updateBoardWithTrace(List<int[]> connectTrace){
+        for (int[] eachTrace:
+        connectTrace) {
+            mBoard[eachTrace[X]][eachTrace[Y]] += 2;
+        }
+//        saveBoard();
+        // todo save
     }
 
     private void updateBoard(int[] newStonePoint, int stoneType) {
         mBoard[newStonePoint[X]][newStonePoint[Y]] = stoneType;
+//        saveBoard();
+        // todo save
     }
 
     @Override
     public void onNewStone(StonePoint stonePoint) {
         onNewStone(stonePoint.getStonePoint(), stonePoint.getStoneType());
+    }
+
+    private void printBoard(int[][] board) {
+        String output = "";
+        for (int[] row:
+             board) {
+            output += "\n";
+            for (int each:
+                 row) {
+                output += each;
+            }
+        }
+        log.info("GameControllerImpl/printBoard: [{}]",output);
     }
 }

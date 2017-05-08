@@ -1,5 +1,7 @@
 package com.asuscomm.yangyinetwork.websocket.ingame.domain;
 
+import java.util.Arrays;
+
 /**
  * Created by jaeyoung on 2017. 5. 7..
  */
@@ -29,5 +31,13 @@ public class StonePoint {
 
     public void setStoneType(int stoneType) {
         this.stoneType = stoneType;
+    }
+
+    @Override
+    public String toString() {
+        return "StonePoint{" +
+                "stonePoint=" + Arrays.toString(stonePoint) +
+                ", stoneType=" + stoneType +
+                '}';
     }
 }

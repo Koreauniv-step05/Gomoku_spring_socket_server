@@ -11,6 +11,7 @@ import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.DEFAULT_BOARD_SIZE;
+import static com.asuscomm.yangyinetwork.game.consts.GAME_DELAY.REPEAT_DELAY;
 import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_NEW_STONE_FROM_CLIENT;
 import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_YOUR_TURN;
 
@@ -57,7 +58,7 @@ public class ChannelControllerImpl implements ChannelController, GameController.
 //                }
 
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(REPEAT_DELAY);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -99,9 +100,8 @@ public class ChannelControllerImpl implements ChannelController, GameController.
         String command = socketMessage.getCommand();
         switch(command) {
             case ON_NEW_STONE_FROM_CLIENT:
-                log.info("ChannelControllerImpl/toServer: ON_NEW_STONE_FROM_CLIENT BEFORE "+socketMessage.getContent());
+                log.info("ChannelControllerImpl/toServer: ON_NEW_STONE_FROM_CLIENT "+socketMessage.getContent().toString());
                 StonePoint stonePoint = (StonePoint) socketMessage.getContent();
-                log.info("ChannelControllerImpl/toServer: ON_NEW_STONE_FROM_CLIENT AFTER");
                 this.mGameController.onNewStone(stonePoint);
                 break;
         }
