@@ -9,4 +9,7 @@ public interface GAME_BOARD {
     int BLACK_STONE = 1;
     int WHITE_STONE = 2;
     int WALL_STONE = 2;
+
+    int X = 0;
+    int Y = 1;
 }

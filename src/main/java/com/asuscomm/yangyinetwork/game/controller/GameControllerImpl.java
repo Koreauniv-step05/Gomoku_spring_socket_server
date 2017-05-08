@@ -4,6 +4,7 @@ import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
+import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.isGameEnd;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
@@ -62,12 +63,20 @@ public class GameControllerImpl implements GameController {
     @Override
     public void onNewStone(int[] newStonePoint, int stoneType) {
         log.info("GameControllerImpl/onNewStone: [{}]",newStonePoint.toString());
-        if(true) { // isvalid?
-            // updateBoard
-            rotateTurn();
+        if(RuleChecker.isValidStone(mBoard,newStonePoint)) { // isvalid?
+            updateBoard(newStonePoint, stoneType);
+            if(isGameEnd(mBoard,newStonePoint)) {
+                log.info("GameControllerImpl/updateBoard: gameEnd");
+            } else {
+                rotateTurn();
+            }
         } else {
             // send invalid
         }
+    }
+
+    private void updateBoard(int[] newStonePoint, int stoneType) {
+        mBoard[newStonePoint[X]][newStonePoint[Y]] = stoneType;
     }
 
     @Override
