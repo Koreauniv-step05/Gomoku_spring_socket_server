@@ -1,6 +1,8 @@
 package com.asuscomm.yangyinetwork.game.controller;
 
+import com.asuscomm.yangyinetwork.repo.Firebase;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
+import com.google.firebase.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -15,13 +17,12 @@ import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.isGameEnd;
  */
 @Slf4j
 public class GameControllerImpl implements GameController {
-//    private Player mPlayerBlack;
-//    private Player mPlayerWhite;
     private int mTurn;
     private boolean mIsProcessing;
     private GameControllerListener mListener;
     private int mBoardSize;
     private int[][] mBoard;
+    private String firebaseKey;
     
     void sendListenersNewStone(int[] newStonePoint, int stoneType) {
         this.mListener.onNewStone(newStonePoint, stoneType);
@@ -40,6 +41,7 @@ public class GameControllerImpl implements GameController {
         this.mTurn = WHITE_STONE;
         this.mIsProcessing=false;
         this.initBoard();
+        firebaseKey = Firebase.getInstance().saveGame();
         rotateTurn();
     }
 
@@ -111,14 +113,13 @@ public class GameControllerImpl implements GameController {
         connectTrace) {
             mBoard[eachTrace[X]][eachTrace[Y]] += 2;
         }
-//        saveBoard();
-        // todo save
+        Firebase.getInstance().saveBoard(firebaseKey,mBoard);
     }
 
     private void updateBoard(int[] newStonePoint, int stoneType) {
         mBoard[newStonePoint[X]][newStonePoint[Y]] = stoneType;
-//        saveBoard();
-        // todo save
+        Firebase.getInstance().saveStonePoint(firebaseKey, newStonePoint, stoneType);
+        Firebase.getInstance().saveBoard(firebaseKey, mBoard);
     }
 
     @Override
