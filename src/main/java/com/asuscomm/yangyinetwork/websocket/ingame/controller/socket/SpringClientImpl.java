@@ -10,9 +10,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SpringClientImpl implements SpringClient {
     private String mChannel;
+    private OnToServerListener mListener;
+
+    public String getChannelId() {
+        return mChannel;
+    }
 
     public SpringClientImpl(String mChannel) {
         this.mChannel = mChannel;
+    }
+
+    @Override
+    public void setListener(OnToServerListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -23,5 +33,9 @@ public class SpringClientImpl implements SpringClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void toServer(SocketMessage socketMessage) {
+        mListener.toServer(socketMessage);
     }
 }

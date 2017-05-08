@@ -2,43 +2,103 @@ package com.asuscomm.yangyinetwork.websocket.ingame.controller.manager;
 
 import com.asuscomm.yangyinetwork.game.controller.GameController;
 import com.asuscomm.yangyinetwork.game.controller.GameControllerImpl;
-import com.asuscomm.yangyinetwork.websocket.ingame.controller.adapter.GameAndSocketAdapter;
+import com.asuscomm.yangyinetwork.websocket.channel.domain.OnYourTurn;
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.SpringClient;
 import com.asuscomm.yangyinetwork.websocket.ingame.controller.socket.SpringClientImpl;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketMessage;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
+import lombok.extern.slf4j.Slf4j;
 
+import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.DEFAULT_BOARD_SIZE;
 import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_NEW_STONE_FROM_CLIENT;
+import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_YOUR_TURN;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
  */
-public class ChannelControllerImpl implements ChannelController {
+@Slf4j
+public class ChannelControllerImpl implements ChannelController, GameController.GameControllerListener, SpringClient.OnToServerListener{
     private String mChannelId;
-    private GameAndSocketAdapter mGameAndSocketAdapter;
     private GameController mGameController;
     private SpringClient mSpringClient;
+    boolean repeatFlag = true;
+
+    private SocketMessage lastMessage = null;
 
     public ChannelControllerImpl(String channelId) {
+        log.info("ChannelControllerImpl/ChannelControllerImpl: ");
         this.mChannelId = channelId;
         this.mSpringClient = new SpringClientImpl(channelId);
-        this.mGameController = new GameControllerImpl();
-        this.mGameAndSocketAdapter = new GameAndSocketAdapter(this.mGameController, this.mSpringClient);
-
+        this.mSpringClient.setListener(this);
+        this.mGameController = new GameControllerImpl(DEFAULT_BOARD_SIZE,this);
+        initLastMessage();
+        new Thread(repeatLastMessage).start();
+    }
+    
+    private void initLastMessage() {
+        
     }
 
+    private Runnable repeatLastMessage = new Runnable() {
+        @Override
+        public void run() {
+            log.info("ChannelControllerImpl/run: ");
+            while(true) {
+                if(repeatFlag) {
+                    if (lastMessage != null) {
+                        log.info("ChannelControllerImpl/run: Call toClient");
+                        mSpringClient.toClient(lastMessage);
+                    } else {
+                        log.info("ChannelControllerImpl/run: null message");
+                    }
+                } else {
+                    repeatFlag = true;
+                }
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
 
     public String getChannelId() {
         return mChannelId;
     }
 
-    public void onToServer(SocketMessage socketMessage) {
+    @Override
+    public void onYourTurn(int stoneType, int[][] board) {
+        SocketMessage socketMessage = new SocketMessage(ON_YOUR_TURN, ON_YOUR_TURN, new OnYourTurn(stoneType, board));
+        log.info("ChannelControllerImpl/onYourTurn: [{}]", socketMessage);
+        sendToClient(socketMessage);
+    }
+
+    private void sendToClient(SocketMessage socketMessage) {
+        repeatFlag = false;
+        lastMessage = socketMessage;
+        mSpringClient.toClient(socketMessage);
+    }
+
+    @Override
+    public void onNewStone(int[] newStonePoint, int stoneType) {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+    }
+
+    @Override
+    public void toServer(SocketMessage<Object> socketMessage) {
         String command = socketMessage.getCommand();
         switch(command) {
             case ON_NEW_STONE_FROM_CLIENT:
                 StonePoint stonePoint = (StonePoint) socketMessage.getContent();
-                this.mGameAndSocketAdapter.onNewStoneFromClient(stonePoint);
+                this.mGameController.onNewStone(stonePoint);
                 break;
         }
     }

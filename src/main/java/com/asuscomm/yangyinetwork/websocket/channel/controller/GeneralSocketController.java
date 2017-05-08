@@ -28,6 +28,8 @@ public class GeneralSocketController {
                 commandReply = GeneralCommandService.getInstance().joinSomewhere();
                 break;
             case Commands.TO_SERVER.JOIN_CHANNEL:
+                String channelId = (String)command.getContent();
+                commandReply = GeneralCommandService.getInstance().joinChannel(channelId);
                 break;
             case Commands.TO_SERVER.GET_CHANNELS:
                 break;

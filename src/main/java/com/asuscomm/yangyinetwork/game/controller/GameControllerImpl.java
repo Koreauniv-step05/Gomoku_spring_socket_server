@@ -1,5 +1,7 @@
 package com.asuscomm.yangyinetwork.game.controller;
 
+import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
+
 import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
 
 /**
@@ -10,26 +12,22 @@ public class GameControllerImpl implements GameController {
 //    private Player mPlayerWhite;
     private int mTurn;
     private boolean mIsProcessing;
-    private GameControllerListener gameControllerListener;
-    private GameControllerListener whitePlayerListener;
+    private GameControllerListener mListener;
     private int mBoardSize;
     private int[][] mBoard;
     
     void sendListenersNewStone(int[] newStonePoint, int stoneType) {
-        this.gameControllerListener.onNewStone(newStonePoint, stoneType);
+        this.mListener.onNewStone(newStonePoint, stoneType);
     }
 
 
-    public GameControllerImpl(int board_size) {
+    public GameControllerImpl(int board_size, GameControllerListener listener) {
         this.mBoardSize = board_size;
-        this.mTurn = BLACK_STONE;
+        this.mTurn = WHITE_STONE;
         this.mIsProcessing=false;
         this.initBoard();
-    }
-
-    public GameControllerImpl() {
-        this.mBoardSize = DEFAULT_BOARD_SIZE;
-        this.initBoard();
+        addGameControllerListener(listener);
+        rotateTurn();
     }
 
     private void initBoard() {
@@ -40,12 +38,17 @@ public class GameControllerImpl implements GameController {
 
     
     public void rotateTurn() {
-        this.gameControllerListener.onYourTurn(this.mTurn);
+        if(mTurn == BLACK_STONE) {
+            mTurn = WHITE_STONE;
+        } else {
+            mTurn = BLACK_STONE;
+        }
+        this.mListener.onYourTurn(this.mTurn, this.mBoard);
     }
 
     @Override
     public void addGameControllerListener(GameControllerListener listener) {
-
+        mListener = listener;
     }
 
     @Override
@@ -55,6 +58,16 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public void onNewStone(int[] newStonePoint, int stoneType) {
+        if(true) { // isvalid?
+            // updateBoard
+            rotateTurn();
+        } else {
+            // send invalid
+        }
+    }
 
+    @Override
+    public void onNewStone(StonePoint stonePoint) {
+        onNewStone(stonePoint.getStonePoint(), stonePoint.getStoneType());
     }
 }

@@ -31,4 +31,8 @@ public class GeneralCommandService {
             return null;
         }
     }
+
+    public CommandReply joinChannel(String channelId) {
+        return ChannelService.getInstance().joinChannelById(channelId);
+    }
 }

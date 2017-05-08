@@ -3,6 +3,9 @@ package com.asuscomm.yangyinetwork.websocket.channel.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.BLACK_STONE;
+import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.NONE_STONE;
+import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.WHITE_STONE;
 import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_MORE_USER;
 import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_ONLY_OBSERVER;
 
@@ -11,6 +14,7 @@ import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status
  */
 public class Channel {
     List<User> userList;
+    User lastUser;
     String id;
 
     public interface Status {
@@ -23,7 +27,7 @@ public class Channel {
     }
 
     public Channel(String id) {
-        this.userList = new ArrayList<>();
+        this.userList = new ArrayList<User>();
         this.id = id;
     }
 
@@ -42,9 +46,10 @@ public class Channel {
 
     public void addUser(User user) {
         this.userList.add(user);
+        this.lastUser = user;
     }
     public void addUser() {
-        this.addUser(new User());
+        this.addUser(new User(newStoneType()));
     }
 
     public String getId() {
@@ -55,11 +60,37 @@ public class Channel {
         this.id = id;
     }
 
-    public String getStatus() {
+    public String status() {
         if(userList.size() >= 2) {
             return NEEDS_ONLY_OBSERVER;
         } else {
             return NEEDS_MORE_USER;
         }
+    }
+
+    public int newStoneType() {
+        int target = BLACK_STONE;
+        for (User user:
+             userList) {
+            if(user.getStoneType() == target) {
+                target = nextTarget(target);
+            }
+        }
+        return target;
+    }
+
+    private int nextTarget(int target) {
+        if ( target == BLACK_STONE ) {
+            return WHITE_STONE;
+        }
+        return NONE_STONE;
+    }
+
+    public User getLastUser() {
+        return lastUser;
+    }
+
+    public void setLastUser(User lastUser) {
+        this.lastUser = lastUser;
     }
 }

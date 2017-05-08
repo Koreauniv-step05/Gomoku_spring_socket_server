@@ -11,7 +11,6 @@ import org.springframework.messaging.support.ChannelInterceptorAdapter;
 
 @Slf4j
 public class CustomChannelInterceptor extends ChannelInterceptorAdapter {
-
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 

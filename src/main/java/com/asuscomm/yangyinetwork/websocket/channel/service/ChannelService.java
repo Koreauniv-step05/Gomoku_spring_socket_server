@@ -2,7 +2,7 @@ package com.asuscomm.yangyinetwork.websocket.channel.service;
 
 import com.asuscomm.yangyinetwork.websocket.channel.domain.Channel;
 import com.asuscomm.yangyinetwork.websocket.channel.domain.CommandReply;
-import com.asuscomm.yangyinetwork.websocket.ingame.controller.manager.ChannelControllerManagerImpl;
+import com.asuscomm.yangyinetwork.websocket.ingame.controller.manager.ChannelControllerImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class ChannelService {
 
         for (Channel channel:
              channels) {
-            if (Channel.Status.NEEDS_MORE_USER.equals(channel.getStatus())) {
+            if (Channel.Status.NEEDS_MORE_USER.equals(channel.status())) {
                 emptyChannels.add(channel);
             }
         }
@@ -55,21 +55,48 @@ public class ChannelService {
         String channelId = channel.getId();
 
         log.info("ChannelService/enableChannel: makeNewChannelController [{}]",channelId);
-        ChannelControllerManagerImpl.getInstance().makeNewChannelController(channelId);
+        new ChannelControllerImpl(channelId);
+//        ChannelControllerManagerImpl.getInstance().makeNewChannelController(channelId);
+    }
+
+    public Channel makeNewChannel(String channelId) {
+        Channel newChannel = new Channel(channelId);
+        channels.add(newChannel);
+        return newChannel; // todo save db
+    }
+
+    public CommandReply joinChannelById(String channelId) {
+        Channel channel = null;
+
+        for (Channel each :
+                findChannels()) {
+            if (channelId.equals(each.getId())) {
+                channel = each;
+                break;
+            }
+        }
+
+        if (channel == null) {
+            channel = makeNewChannel(channelId);
+        }
+
+        return joinChannel(channel);
     }
 
     public CommandReply joinChannel(Channel channel) {
+
         // join
         // if success
         channel.addUser();
 
-        if (Channel.Status.NEEDS_ONLY_OBSERVER.equals(channel.getStatus())) {
-            log.info("ChannelService/joinChannel: ");
+        if (Channel.Status.NEEDS_ONLY_OBSERVER.equals(channel.status())) {
+            log.info("ChannelService/joinChannel: enableChannel");
             this.enableChannel(channel);
         }
 
         String message = "You're "+JOINED_CHANNEL+" to "+channel.toString();
         log.info("GeneralCommandService/joinChannel: [{}]",message);
+        log.info("GeneralCommandService/joinChannel: [{}]",channel.status());
         CommandReply commandReply = new CommandReply(JOINED_CHANNEL, message, channel);
         return commandReply;
     }
