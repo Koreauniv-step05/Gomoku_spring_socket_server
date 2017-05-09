@@ -37,11 +37,11 @@ public class GameControllerImpl implements GameController {
 
     private void newGameStart() {
         log.info("GameControllerImpl/newGameStart: ");
-        this.mTurn = WHITE_STONE;
+        this.mTurn = BLACK_STONE;
         this.mIsProcessing=false;
         this.initBoard();
         firebaseKey = Firebase.getInstance().saveGame();
-        this.remainStones = 1;
+        this.remainStones = 2;
         rotateTurn();
     }
 
