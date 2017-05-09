@@ -81,8 +81,8 @@ public class GameControllerImpl implements GameController {
     public void onNewStone(int[] newStonePoint, int stoneType) {
         log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
         if(stoneType == mTurn) {
-            if (!mIsProcessing) {
-                mIsProcessing = true;
+            if (!this.mIsProcessing) {
+                this.mIsProcessing = true;
                 if (RuleChecker.isValidStone(mBoard, newStonePoint)) { // isvalid?
                     updateBoard(newStonePoint, stoneType);
                     List<int[]> connectTrace = isGameEnd(mBoard, newStonePoint);
@@ -102,6 +102,7 @@ public class GameControllerImpl implements GameController {
                         rotateTurn();
                     }
                 } else {
+                    this.mIsProcessing = false;
                     // send invalid
                 }
             } else {
