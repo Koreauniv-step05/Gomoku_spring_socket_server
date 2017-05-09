@@ -2,14 +2,12 @@ package com.asuscomm.yangyinetwork.game.controller;
 
 import com.asuscomm.yangyinetwork.repo.Firebase;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
-import com.google.firebase.tasks.Task;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
-import static com.asuscomm.yangyinetwork.game.consts.GAME_DELAY.NEW_GAME_DELAY;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.*;
+import static com.asuscomm.yangyinetwork.config.GAME_DELAY.NEW_GAME_DELAY;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.isGameEnd;
 
 /**
@@ -23,6 +21,7 @@ public class GameControllerImpl implements GameController {
     private int mBoardSize;
     private int[][] mBoard;
     private String firebaseKey;
+    private int remainStones;
     
     void sendListenersNewStone(int[] newStonePoint, int stoneType) {
         this.mListener.onNewStone(newStonePoint, stoneType);
@@ -42,6 +41,7 @@ public class GameControllerImpl implements GameController {
         this.mIsProcessing=false;
         this.initBoard();
         firebaseKey = Firebase.getInstance().saveGame();
+        this.remainStones = 1;
         rotateTurn();
     }
 
@@ -54,10 +54,14 @@ public class GameControllerImpl implements GameController {
     
     public void rotateTurn() {
         log.info("GameControllerImpl/rotateTurn: ");
-        if(mTurn == BLACK_STONE) {
-            mTurn = WHITE_STONE;
-        } else {
-            mTurn = BLACK_STONE;
+        this.remainStones--;
+        if(this.remainStones==0) {
+            this.remainStones = 2;
+            if (mTurn == BLACK_STONE) {
+                mTurn = WHITE_STONE;
+            } else {
+                mTurn = BLACK_STONE;
+            }
         }
         this.mIsProcessing = false;
         this.mListener.onYourTurn(this.mTurn, this.mBoard);

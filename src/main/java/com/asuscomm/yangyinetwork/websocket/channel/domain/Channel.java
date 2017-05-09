@@ -3,9 +3,9 @@ package com.asuscomm.yangyinetwork.websocket.channel.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.BLACK_STONE;
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.NONE_STONE;
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.WHITE_STONE;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.BLACK_STONE;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.NONE_STONE;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.WHITE_STONE;
 import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_MORE_USER;
 import static com.asuscomm.yangyinetwork.websocket.channel.domain.Channel.Status.NEEDS_ONLY_OBSERVER;
 

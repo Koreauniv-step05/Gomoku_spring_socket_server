@@ -10,10 +10,10 @@ import com.asuscomm.yangyinetwork.websocket.ingame.domain.SocketStonePoint;
 import com.asuscomm.yangyinetwork.websocket.ingame.domain.StonePoint;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.DEFAULT_BOARD_SIZE;
-import static com.asuscomm.yangyinetwork.game.consts.GAME_DELAY.REPEAT_DELAY;
-import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_NEW_STONE_FROM_CLIENT;
-import static com.asuscomm.yangyinetwork.websocket.ingame.consts.Commands.ON_YOUR_TURN;
+import static com.asuscomm.yangyinetwork.config.Commands.CHANNEL.ON_NEW_STONE_FROM_CLIENT;
+import static com.asuscomm.yangyinetwork.config.Commands.CHANNEL.ON_YOUR_TURN;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.DEFAULT_BOARD_SIZE;
+import static com.asuscomm.yangyinetwork.config.GAME_DELAY.REPEAT_DELAY;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..

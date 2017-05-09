@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.asuscomm.yangyinetwork.game.consts.GAME_BOARD.*;
+import static com.asuscomm.yangyinetwork.config.GAME_BOARD.*;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.UPANDDOWN.DOWN;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.UPANDDOWN.END;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.UPANDDOWN.UP;

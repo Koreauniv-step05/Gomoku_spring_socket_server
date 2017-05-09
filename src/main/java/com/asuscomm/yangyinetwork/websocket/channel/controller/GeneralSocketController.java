@@ -1,6 +1,6 @@
 package com.asuscomm.yangyinetwork.websocket.channel.controller;
 
-import com.asuscomm.yangyinetwork.websocket.channel.controller.consts.Commands;
+import com.asuscomm.yangyinetwork.config.Commands;
 import com.asuscomm.yangyinetwork.websocket.channel.domain.Command;
 import com.asuscomm.yangyinetwork.websocket.channel.domain.CommandReply;
 import com.asuscomm.yangyinetwork.websocket.channel.service.GeneralCommandService;
@@ -24,14 +24,14 @@ public class GeneralSocketController {
         CommandReply commandReply = null;
 
         switch (command.getCommand()) {
-            case Commands.TO_SERVER.JOIN_SOMEWHERE:
+            case Commands.GENERAL.TO_SERVER.JOIN_SOMEWHERE:
                 commandReply = GeneralCommandService.getInstance().joinSomewhere();
                 break;
-            case Commands.TO_SERVER.JOIN_CHANNEL:
+            case Commands.GENERAL.TO_SERVER.JOIN_CHANNEL:
                 String channelId = (String)command.getContent();
                 commandReply = GeneralCommandService.getInstance().joinChannel(channelId);
                 break;
-            case Commands.TO_SERVER.GET_CHANNELS:
+            case Commands.GENERAL.TO_SERVER.GET_CHANNELS:
                 break;
             default:
                 commandReply = new CommandReply("testCommand", "test", "hi");

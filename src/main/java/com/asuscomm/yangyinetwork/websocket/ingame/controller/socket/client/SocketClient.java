@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.asuscomm.yangyinetwork.websocket.commons.config.SocketClientConfig.*;
+import static com.asuscomm.yangyinetwork.config.SocketClientConfig.*;
 
 /**
  * Created by jaeyoung on 2017. 5. 8..

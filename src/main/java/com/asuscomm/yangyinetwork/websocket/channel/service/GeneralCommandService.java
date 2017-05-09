@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static com.asuscomm.yangyinetwork.websocket.channel.controller.consts.Commands.TO_CLIENT.JOINED_CHANNEL;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..

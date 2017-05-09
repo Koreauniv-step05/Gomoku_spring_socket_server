@@ -32,6 +32,7 @@ public class Firebase {
 
     public Firebase() {
         FirebaseOptions options = null;
+
         try {
             options = new FirebaseOptions.Builder()
                     .setServiceAccount(new FileInputStream(JSON_PATH))
