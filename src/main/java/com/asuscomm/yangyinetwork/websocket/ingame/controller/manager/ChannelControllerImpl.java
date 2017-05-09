@@ -46,16 +46,16 @@ public class ChannelControllerImpl implements ChannelController, GameController.
         public void run() {
             log.info("ChannelControllerImpl/run: ");
             while(true) {
-//                if(repeatFlag) {
-//                    if (lastMessage != null) {
-//                        log.info("ChannelControllerImpl/run: Call toClient");
-//                        mSpringClient.toClient(lastMessage);
-//                    } else {
-//                        log.info("ChannelControllerImpl/run: null message");
-//                    }
-//                } else {
-//                    repeatFlag = true;
-//                }
+                if(repeatFlag) {
+                    if (lastMessage != null) {
+                        log.info("ChannelControllerImpl/run: Call toClient");
+                        mSpringClient.toClient(lastMessage);
+                    } else {
+                        log.info("ChannelControllerImpl/run: null message");
+                    }
+                } else {
+                    repeatFlag = true;
+                }
 
                 try {
                     Thread.sleep(REPEAT_DELAY);
