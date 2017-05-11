@@ -73,34 +73,30 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public void onNewStone(int[][] newStonePoint, int stoneType) {
-        log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
+//        log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
         if(stoneType == mTurn) {
             if (!this.mIsProcessing) {
                 this.mIsProcessing = true;
-                for (int i = 0; i < newStonePoint.length; i++) {
-                    int[] newStone = newStonePoint[i];
-                    if (RuleChecker.isValidStone(mBoard, newStone)) { // isvalid?
-                        updateBoard(newStonePoint, stoneType);
-                        List<int[]> connectTrace = isGameEnd(mBoard, newStone);
-                        if (connectTrace != null) {
-                            // todo save trace connectTrace
-                            updateBoardWithTrace(connectTrace);
-                            log.info("GameControllerImpl/updateBoard: gameEnd");
-                            printBoard(mBoard);
-                            try {
-                                Thread.sleep(NEW_GAME_DELAY);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            newGameStart();
+                if (RuleChecker.isValidStone(mBoard, newStonePoint)) { // isvalid?
+                    updateBoard(newStonePoint, stoneType);
+                    List<int[]> connectTrace = isGameEnd(mBoard, newStonePoint);
+                    if (connectTrace != null) {
+                        // todo save trace connectTrace
+                        updateBoardWithTrace(connectTrace);
+                        log.info("GameControllerImpl/updateBoard: gameEnd");
+                        printBoard(mBoard);
+                        try {
+                            Thread.sleep(NEW_GAME_DELAY);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } else {
-                        this.mIsProcessing = false;
-                        return;
+                    newGameStart();
                     }
-                    // send invalid
+                    rotateTurn();
+                } else {
+                    this.mIsProcessing = false;
                 }
-                rotateTurn();
+                // send invalid
             } else {
                 log.info("GameControllerImpl/onNewStone: IsProcessing");
             }

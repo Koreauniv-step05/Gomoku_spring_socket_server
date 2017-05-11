@@ -30,12 +30,32 @@ public class RuleChecker {
         }
     }
 
+    public static boolean isValidStone(int[][] board, int[][] stonePoint) {
+        for (int i = 0; i < stonePoint.length; i++) {
+            int[] each = stonePoint[i];
+            if (!isValidStone(board, each)) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
     interface UPANDDOWN {
         int UP = 0;
         int DOWN = 1;
         int END = 2;
     }
 
+    public static List<int[]> isGameEnd(int[][] board, int[][] stonePoints) {
+        for (int i = 0; i < stonePoints.length; i++) {
+            List<int[]> result = isGameEnd(board,stonePoints[i]);
+            if(result!=null) {
+                return result;
+            }
+        }
+        return null;
+    }
     public static List<int[]> isGameEnd(int[][] board, int[] stonePoint) {
         int[][] DIRS = {
                 {1, +1},
