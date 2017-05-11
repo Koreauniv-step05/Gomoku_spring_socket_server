@@ -27,7 +27,6 @@ public class GameControllerImpl implements GameController {
         this.mListener.onNewStone(newStonePoint, stoneType);
     }
 
-
     public GameControllerImpl(int board_size, GameControllerListener listener) {
         this.mIsProcessing = true;
         this.mBoardSize = board_size;
@@ -37,11 +36,10 @@ public class GameControllerImpl implements GameController {
 
     private void newGameStart() {
         log.info("GameControllerImpl/newGameStart: ");
-        this.mTurn = BLACK_STONE;
+        this.mTurn = WHITE_STONE;
         this.mIsProcessing=false;
         this.initBoard();
         firebaseKey = Firebase.getInstance().saveGame();
-        this.remainStones = 2;
         rotateTurn();
     }
 
@@ -54,14 +52,10 @@ public class GameControllerImpl implements GameController {
     
     public void rotateTurn() {
         log.info("GameControllerImpl/rotateTurn: ");
-        this.remainStones--;
-        if(this.remainStones==0) {
-            this.remainStones = 2;
-            if (mTurn == BLACK_STONE) {
-                mTurn = WHITE_STONE;
-            } else {
-                mTurn = BLACK_STONE;
-            }
+        if (mTurn == BLACK_STONE) {
+            mTurn = WHITE_STONE;
+        } else {
+            mTurn = BLACK_STONE;
         }
         this.mIsProcessing = false;
         this.mListener.onYourTurn(this.mTurn, this.mBoard);
@@ -78,33 +72,35 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void onNewStone(int[] newStonePoint, int stoneType) {
+    public void onNewStone(int[][] newStonePoint, int stoneType) {
         log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
         if(stoneType == mTurn) {
             if (!this.mIsProcessing) {
                 this.mIsProcessing = true;
-                if (RuleChecker.isValidStone(mBoard, newStonePoint)) { // isvalid?
-                    updateBoard(newStonePoint, stoneType);
-                    List<int[]> connectTrace = isGameEnd(mBoard, newStonePoint);
-                    if (connectTrace != null) {
-                        // todo save trace connectTrace
-                        updateBoardWithTrace(connectTrace);
-                        log.info("GameControllerImpl/updateBoard: gameEnd");
-                        printBoard(mBoard);
-                        try {
-                            Thread.sleep(NEW_GAME_DELAY);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                for (int i = 0; i < newStonePoint.length; i++) {
+                    int[] newStone = newStonePoint[i];
+                    if (RuleChecker.isValidStone(mBoard, newStone)) { // isvalid?
+                        updateBoard(newStonePoint, stoneType);
+                        List<int[]> connectTrace = isGameEnd(mBoard, newStone);
+                        if (connectTrace != null) {
+                            // todo save trace connectTrace
+                            updateBoardWithTrace(connectTrace);
+                            log.info("GameControllerImpl/updateBoard: gameEnd");
+                            printBoard(mBoard);
+                            try {
+                                Thread.sleep(NEW_GAME_DELAY);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            newGameStart();
                         }
-                        newGameStart();
                     } else {
-
-                        rotateTurn();
+                        this.mIsProcessing = false;
+                        return;
                     }
-                } else {
-                    this.mIsProcessing = false;
                     // send invalid
                 }
+                rotateTurn();
             } else {
                 log.info("GameControllerImpl/onNewStone: IsProcessing");
             }
@@ -121,9 +117,12 @@ public class GameControllerImpl implements GameController {
         Firebase.getInstance().saveBoard(firebaseKey,mBoard);
     }
 
-    private void updateBoard(int[] newStonePoint, int stoneType) {
-        mBoard[newStonePoint[X]][newStonePoint[Y]] = stoneType;
-        Firebase.getInstance().saveStonePoint(firebaseKey, newStonePoint, stoneType);
+    private void updateBoard(int[][] newStonePoint, int stoneType) {
+        for (int i = 0; i < newStonePoint.length; i++) {
+            int[] newStone = newStonePoint[i];
+            mBoard[newStone[X]][newStone[Y]] = stoneType;
+            Firebase.getInstance().saveStonePoint(firebaseKey, newStone, stoneType);
+        }
         Firebase.getInstance().saveBoard(firebaseKey, mBoard);
     }
 

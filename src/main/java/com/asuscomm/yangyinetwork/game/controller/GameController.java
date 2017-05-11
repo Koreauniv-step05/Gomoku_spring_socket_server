@@ -14,6 +14,6 @@ public interface GameController {
 
     void addGameControllerListener(GameControllerListener listener);
     void removeGameControllerListener(GameControllerListener listener);
-    void onNewStone(int[] newStonePoint, int stoneType);
+    void onNewStone(int[][] newStonePoint, int stoneType);
     void onNewStone(StonePoint stonePoint);
 }
