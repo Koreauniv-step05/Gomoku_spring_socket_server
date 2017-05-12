@@ -43,7 +43,7 @@ public class ChannelSocketController {
 
         for (SpringClient springClient:
                 ChannelSocketController.getInstance().mSpringClients) {
-            log.info("ChannelSocketController/toServer: ChannelId : [{}]",springClient.getChannelId());
+//            log.info("ChannelSocketController/toServer: ChannelId : [{}]",springClient.getChannelId());
             if (channel.equals(springClient.getChannelId())) {
                 receiver = springClient;
                 break;
@@ -59,7 +59,7 @@ public class ChannelSocketController {
     }
 
     public SocketMessage toClient(String channel, SocketMessage<Object> socketMessage) throws Exception {
-        log.info("ChannelSocketController/toClient: channel = [{}], message = ",channel, socketMessage.toString());
+        log.info("ChannelSocketController/toClient: channel = [{}], message = [{}]",channel, socketMessage.toString());
         SocketClient.getInstance().sendChannelSocketMessage(channel, socketMessage);
         return socketMessage;
     }

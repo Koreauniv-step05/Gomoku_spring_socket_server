@@ -9,6 +9,7 @@ import java.util.List;
 import static com.asuscomm.yangyinetwork.config.GAME_BOARD.*;
 import static com.asuscomm.yangyinetwork.config.GAME_DELAY.NEW_GAME_DELAY;
 import static com.asuscomm.yangyinetwork.game.controller.RuleChecker.isGameEnd;
+import static com.asuscomm.yangyinetwork.utils.PrintUtils.printStonePointPairs;
 
 /**
  * Created by jaeyoung on 2017. 5. 7..
@@ -73,7 +74,8 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public void onNewStone(int[][] newStonePoint, int stoneType) {
-//        log.info("GameControllerImpl/onNewStone: [{}]", newStonePoint[X]+","+newStonePoint[Y]);
+        log.info("GameControllerImpl/onNewStone: stoneType=[{}]", stoneType);
+        printStonePointPairs(newStonePoint);
         if(stoneType == mTurn) {
             if (!this.mIsProcessing) {
                 this.mIsProcessing = true;

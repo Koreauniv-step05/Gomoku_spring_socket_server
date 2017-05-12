@@ -74,7 +74,7 @@ public class ChannelControllerImpl implements ChannelController, GameController.
     @Override
     public void onYourTurn(int stoneType, int[][] board) {
         SocketMessage socketMessage = new SocketMessage(ON_YOUR_TURN, ON_YOUR_TURN, new OnYourTurn(stoneType, board));
-        log.info("ChannelControllerImpl/onYourTurn: [{}]", socketMessage);
+//        log.info("ChannelControllerImpl/onYourTurn: [{}]", socketMessage);
         sendToClient(socketMessage);
     }
 
@@ -96,7 +96,7 @@ public class ChannelControllerImpl implements ChannelController, GameController.
 
     @Override
     public void toServer(SocketStonePoint socketMessage) {
-        log.info("ChannelControllerImpl/toServer: [{}]");
+//        log.info("ChannelControllerImpl/toServer: [{}]");
         String command = socketMessage.getCommand();
         switch(command) {
             case ON_NEW_STONE_FROM_CLIENT:

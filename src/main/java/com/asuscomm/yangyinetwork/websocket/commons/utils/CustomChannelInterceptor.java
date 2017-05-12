@@ -14,7 +14,7 @@ public class CustomChannelInterceptor extends ChannelInterceptorAdapter {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
-        log.info("preSend message=[{}], channel=[{}]", message, channel);
+//        log.info("preSend message=[{}], channel=[{}]", message, channel);
 
 //		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 //
@@ -28,7 +28,7 @@ public class CustomChannelInterceptor extends ChannelInterceptorAdapter {
     @Override
     public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
 
-        log.info("postSend message=[{}], channel=[{}], sent=[{}]", message, channel, sent);
+//        log.info("postSend message=[{}], channel=[{}], sent=[{}]", message, channel, sent);
 
 //		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 //

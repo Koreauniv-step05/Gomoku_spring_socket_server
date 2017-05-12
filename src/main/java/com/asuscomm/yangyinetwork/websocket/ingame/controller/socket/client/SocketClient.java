@@ -68,7 +68,7 @@ public class SocketClient {
     }
 
     public void sendChannelSocketMessage(String channelId, SocketMessage socketMessage) {
-        log.info("SocketClient/sendChannelSocketMessage: [{}]");
+//        log.info("SocketClient/sendChannelSocketMessage: [{}]");
         sendSocketMessage("/topic/to_client/" + channelId, socketMessage);
     }
 
